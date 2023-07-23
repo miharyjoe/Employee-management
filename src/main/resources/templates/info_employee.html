@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href = "styles.css" rel = "stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+        crossorigin="anonymous">
+    <title>About</title>
+</head>
+<body>
+<div th:replace="fragments/navbar.html"></div>
+<div class="container">
+  <h1>About Employee</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>ID photo</h2>
+      <img th:src="@{'data:image/jpeg;base64,' + ${employee.image}}" alt="image" class="img-fluid img-thumbnail">
+    </div>
+    <div class="col-md-6">
+      <h2>Information</h2>
+      <table class="table table-bordered">
+        <tr>
+          <th>Firstname</th>
+          <td th:text="${employee.firstname}"></td>
+        </tr>
+        <tr>
+          <th>Lastname</th>
+          <td th:text="${employee.lastname}"></td>
+        </tr>
+        <tr>
+          <th>Birthdate</th>
+          <td th:text="${employee.birthDate}"></td>
+        </tr>
+        <tr>
+          <th>Matricule</th>
+          <td th:text="${employee.matricule}"></td>
+        </tr>
+        <tr>
+          <th>Sexe</th>
+          <td th:text="${employee.sexe}"></td>
+        </tr>
+        <tr>
+          <th>Phone number</th>
+          <td>
+            <ul class="list-group">
+              <li class="list-group-item" th:each="telephone : ${employee.telephones}" th:text="${telephone}"></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td th:text="${employee.address}"></td>
+        </tr>
+        <tr>
+          <th>Personnal Email</th>
+          <td th:text="${employee.emailPerso}"></td>
+        </tr>
+        <tr>
+          <th>Professional Email</th>
+          <td th:text="${employee.emailPro}"></td>
+        </tr>
+        <tr>
+          <th>ID number</th>
+          <td th:text="${employee.cinNumber}"></td>
+        </tr>
+        <tr>
+          <th>ID Date</th>
+          <td th:text="${employee.cinDate}"></td>
+        </tr>
+        <tr>
+          <th>ID place</th>
+          <td th:text="${employee.placeCin}"></td>
+        </tr>
+        <tr>
+          <th>Fonction</th>
+          <td th:text="${employee.fonction}"></td>
+        </tr>
+        <tr>
+          <th>Children charge</th>
+          <td th:text="${employee.childrenCharge}"></td>
+        </tr>
+        <tr>
+          <th>Hire date</th>
+          <td th:text="${employee.hireDate}"></td>
+        </tr>
+        <tr>
+          <th>Departure date</th>
+          <td th:text="${employee.departureDate}"></td>
+        </tr>
+        <tr>
+          <th>CSP</th>
+          <td th:text="${employee.csp}"></td>
+        </tr>
+        <tr>
+          <th>CNAPS number</th>
+          <td th:text="${employee.numCnaps}"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div th:replace="fragments/footer.html"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+</html>
