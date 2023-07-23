@@ -1,10 +1,11 @@
 package com.employee.employeemanagement.controller;
 
 import com.employee.employeemanagement.controller.mapper.EmployeeMapper;
+import com.employee.employeemanagement.controller.utils.CSVExporter;
 import com.employee.employeemanagement.entity.Employee;
 import com.employee.employeemanagement.service.EmployeeService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,5 +80,16 @@ public class EmployeeController {
         employeeService.updateInfoEmployee(mapper.toUpdate(employee));
         Long id = employeeService.selectEmployee(employee.getId()).getId();
         return "redirect:/employee/about?id="+id;
+    }
+
+    @GetMapping("/employees/export/csv")
+    @ResponseBody
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"employees.csv\"");
+
+        CSVExporter.exportEmployeesToCSV(response.getWriter(), employees);
     }
 }

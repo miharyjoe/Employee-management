@@ -21,16 +21,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "AND (:departureDateStart IS NULL OR e.departureDate >= :departureDateStart) " +
             "AND (:departureDateEnd IS NULL OR e.departureDate <= :departureDateEnd) " +
             "ORDER BY " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'name' THEN e.firstname END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'name' THEN e.firstname END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'firstname' THEN e.lastname END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'firstname' THEN e.lastname END DESC, " +
+            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'firstname' THEN e.firstname END ASC, " +
+            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'firstname' THEN e.firstname END DESC, " +
+            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'lastname' THEN e.lastname END ASC, " +
+            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'lastname' THEN e.lastname END DESC, " +
             "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'sexe' THEN e.sexe END ASC, " +
             "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'sexe' THEN e.sexe END DESC, " +
             "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'fonction' THEN e.fonction END ASC, " +
             "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'fonction' THEN e.fonction END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'hireDare' THEN e.hireDate END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'hireDare' THEN e.hireDate END DESC, " +
+            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'hireDate' THEN e.hireDate END ASC, " +
+            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'hireDate' THEN e.hireDate END DESC, " +
             "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'departureDate' THEN e.departureDate END ASC, " +
             "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'departureDate' THEN e.departureDate END DESC")
     List<Employee> filterAndSortEmployees(@Param("firstname") String firstname,

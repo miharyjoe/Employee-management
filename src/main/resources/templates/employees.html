@@ -100,9 +100,12 @@
         <tr th:if="${#lists.isEmpty(employees)}">
             <td colspan="9">No employees found.</td>
         </tr>
+        <a th:href="@{/employees/export/csv}" class="btn btn-success mt-3">Export to CSV</a>
         </tbody>
     </table>
-    <div th:replace="fragments/footer.html"></div>
+    <div th:replace="fragments/footer.html">
+        <div th:attr="company=${company}"></div>
+    </div>
 </div>
 
 
