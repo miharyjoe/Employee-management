@@ -3,11 +3,14 @@ package com.employee.employeemanagement.service;
 import com.employee.employeemanagement.entity.Employee;
 import com.employee.employeemanagement.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,7 @@ public class EmployeeService {
         return repository.findAll();
     }
 
+
     public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe, String fonction,
                                                  LocalDate hireDateStart, LocalDate hireDateEnd,
                                                  LocalDate departureDateStart, LocalDate departureDateEnd,
@@ -29,8 +33,19 @@ public class EmployeeService {
                 sortDirection.name(), sortField);
     }
 
-    public Employee createEmployee(Employee tocreate){
-       return  repository.save(tocreate);
+/*
+    public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe, String fonction,
+                                                 LocalDate hireDateStart, LocalDate hireDateEnd,
+                                                 LocalDate departureDateStart, LocalDate departureDateEnd,
+                                                 Sort.Direction sortDirection, String sortField) {
+        List<Employee> employees = repository.filterAndSortEmployees(firstname, lastname, sexe, fonction,
+                hireDateStart, hireDateEnd, departureDateStart, departureDateEnd);
+
+        return employees;
+    }
+*/
+    public Employee createEmployee(Employee tocreate) throws IOException {
+            return repository.save(tocreate);
     }
 
     public Employee selectEmployee(Long id){

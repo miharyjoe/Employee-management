@@ -10,7 +10,7 @@
     <title>Employee List</title>
 </head>
 <body>
-<div th:replace="fragments/navbar.html"></div>
+<div th:insert="fragments/navbar.html :: companyLogo"></div>
 <div class="container mt-4">
     <!-- Filter Form -->
     <form th:action="@{/employees/filter}" method="get">
@@ -83,7 +83,11 @@
             <td th:text="${employee.fonction}"></td>
             <td th:text="${employee.hireDate}"></td>
             <td th:text="${employee.matricule}"></td>
-            <td th:text="${employee.telephones}"></td>
+            <td>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="telephone : ${employee.telephones}" th:text="${telephone}"></li>
+                </ul>
+            </td>
             <td>
                 <form th:action="@{/employee/about}" method="get">
                     <input type="hidden" name="id" th:value="${employee.id}" />

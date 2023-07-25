@@ -6,6 +6,7 @@ import com.employee.employeemanagement.entity.Employee;
 import com.employee.employeemanagement.service.EmployeeService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,10 +44,11 @@ public class EmployeeController {
                                          @RequestParam(required = false) LocalDate departureEnd,
                                          @RequestParam(required = false) Sort.Direction sortDirection,
                                          @RequestParam(defaultValue = "id") String sortField,
-                                         Model model) {
+                                         Model model){
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(firstname, lastname, sexe, fonction,
                 hireDateStart, hireDateEnd, departureStart, departureEnd, sortDirection, sortField);
         model.addAttribute("employees", filteredEmployees);
+
         return "employees";
     }
 
@@ -58,7 +60,7 @@ public class EmployeeController {
     }
     @PostMapping("employee/add")
     public String saveEmployee(@RequestParam("image") MultipartFile imageFile, com.employee.employeemanagement.model.Employee employeeModel) throws IOException {
-        employeeService.createEmployee(mapper.toRest(employeeModel));
+            employeeService.createEmployee(mapper.toRest(employeeModel));
         return "redirect:/employees";
     }
 
@@ -77,7 +79,7 @@ public class EmployeeController {
     }
     @PostMapping("employee/save")
     public String updateEmployee(@RequestParam("image") MultipartFile imageFile, com.employee.employeemanagement.model.Employee employee) throws IOException {
-        employeeService.updateInfoEmployee(mapper.toUpdate(employee));
+            employeeService.updateInfoEmployee(mapper.toUpdate(employee));
         Long id = employeeService.selectEmployee(employee.getId()).getId();
         return "redirect:/employee/about?id="+id;
     }
@@ -92,4 +94,5 @@ public class EmployeeController {
 
         CSVExporter.exportEmployeesToCSV(response.getWriter(), employees);
     }
+
 }

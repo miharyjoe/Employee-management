@@ -38,7 +38,13 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
 
-    @ElementCollection
+
+    @ElementCollection(targetClass = String.class)
+    @CollectionTable(
+            name = "employee_telephones",
+            joinColumns = @JoinColumn(name = "employee_id")
+    )
+    @Column(name = "telephones", unique = true)
     private List<String> telephones;
 
     @Column(nullable = false)
