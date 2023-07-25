@@ -56,7 +56,7 @@ public class Employee {
     @Column(name = "email_pro")
     private String emailPro;
 
-    @Column(nullable = false, name = "cin_number")
+    @Column(nullable = false, name = "cin_number",unique = true)
     private Long cinNumber;
 
     @Column(nullable = false, name = "cin_date")

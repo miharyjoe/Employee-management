@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS employee (
                           address VARCHAR NOT NULL,
                           email_perso VARCHAR,
                           email_pro VARCHAR,
-                          cin_number BIGINT NOT NULL,
+                          cin_number BIGINT NOT NULL UNIQUE,
                           cin_date DATE NOT NULL,
                           place_cin VARCHAR NOT NULL,
                           fonction VARCHAR NOT NULL,
