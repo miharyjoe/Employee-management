@@ -27,12 +27,16 @@ public class EmployeeController {
     private final EmployeeMapper mapper;
 
     @GetMapping("employees")
-    public String showEmployees(Model model, HttpSession session) {
+    public String showEmployees(Model model, HttpSession session, HttpServletResponse response) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
             // If the user is not authenticated, redirect to the login page
             return "redirect:/login";
         }
+        // Set cache-control headers to prevent caching the page
+        response.setHeader("Cache-Control", "no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
         List<Employee> allEmployees = employeeService.getAllEmployees();
         model.addAttribute("employees", allEmployees);
         return "employees";
@@ -40,41 +44,35 @@ public class EmployeeController {
 
     @GetMapping("employees/filter")
     public String filterAndSortEmployees(@RequestParam(required = false) String firstname,
-                                         @RequestParam(required = false) String lastname,
-                                         @RequestParam(required = false) Employee.Sexe sexe,
-                                         @RequestParam(required = false) String fonction,
-                                         @RequestParam(required = false) LocalDate hireDateStart,
-                                         @RequestParam(required = false) LocalDate hireDateEnd,
-                                         @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
-                                         @RequestParam(required = false, defaultValue = "firstname") String sortField,
-                                         Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            // If the user is not authenticated, redirect to the login page
-            return "redirect:/login";
-        }
+    @RequestParam(required = false) String lastname,
+    @RequestParam(required = false) Employee.Sexe sexe,
+    @RequestParam(required = false) String fonction,
+    @RequestParam(required = false) LocalDate hire_date_start,
+    @RequestParam(required = false) LocalDate hire_date_end,
+    @RequestParam(required = false) LocalDate departure_date_start,
+    @RequestParam(required = false) LocalDate departure_date_end,
+    @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
+    @RequestParam(required = false, defaultValue = "firstName") String sortField,
+    Model model) {
+
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
-                firstname,
-                lastname,
-                sexe,
-                fonction,
-                hireDateStart,
-                hireDateEnd,
-                sortDirection,
-                sortField
-        );
+                firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
+                sortDirection, sortField);
+
         model.addAttribute("employees", filteredEmployees);
-
-        return "employees";
+        return "employee_filter";
     }
-
     @GetMapping("employee/new")
-    public String addEmployee(Model model, HttpSession session){
+    public String addEmployee(Model model, HttpSession session, HttpServletResponse response){
         String username = (String) session.getAttribute("username");
         if (username == null) {
             // If the user is not authenticated, redirect to the login page
             return "redirect:/login";
         }
+        // Set cache-control headers to prevent caching the page
+        response.setHeader("Cache-Control", "no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
         com.employee.employeemanagement.model.Employee employeeModel = new com.employee.employeemanagement.model.Employee();
         model.addAttribute("employee", employeeModel);
         return "form_employee";
@@ -87,19 +85,32 @@ public class EmployeeController {
     }
 
     @GetMapping("employee/about")
-    public String moreInfo(Model model, @RequestParam("id") Long id){
+    public String moreInfo(Model model, @RequestParam("id") Long id, HttpSession session, HttpServletResponse response){
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // If the user is not authenticated, redirect to the login page
+            return "redirect:/login";
+        }
+        // Set cache-control headers to prevent caching the page
+        response.setHeader("Cache-Control", "no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
         Employee employee = employeeService.selectEmployee(id);
         model.addAttribute("employee",employee);
         return "info_employee";
     }
 
     @GetMapping("employee/update")
-    public String upEmployee(Model model, @RequestParam("id") Long id, HttpSession session){
+    public String upEmployee(Model model, @RequestParam("id") Long id, HttpSession session, HttpServletResponse response){
         String username = (String) session.getAttribute("username");
         if (username == null) {
             // If the user is not authenticated, redirect to the login page
             return "redirect:/login";
         }
+        // Set cache-control headers to prevent caching the page
+        response.setHeader("Cache-Control", "no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
         Employee employee = employeeService.selectEmployee(id);
         model.addAttribute("employee",employee);
         return "update_employee";
@@ -121,5 +132,20 @@ public class EmployeeController {
 
         CSVExporter.exportEmployeesToCSV(response.getWriter(), employees);
     }
+    @GetMapping("/employees/filter/export/csv")
+    public void exportFilterToCSV(@RequestParam(required = false) String firstname,
+                                  @RequestParam(required = false) String lastname,
+                                  @RequestParam(required = false) Employee.Sexe sexe,
+                                  @RequestParam(required = false) String fonction,
+                                  @RequestParam(required = false) LocalDate hire_date_start,
+                                  @RequestParam(required = false) LocalDate hire_date_end,
+                                  HttpServletResponse response) throws IOException {
 
+        List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction, hire_date_start, hire_date_end);
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"employeesfilter.csv\"");
+
+        CSVExporter.exportEmployeesToCSV(response.getWriter(), filteredEmployees);
+    }
 }

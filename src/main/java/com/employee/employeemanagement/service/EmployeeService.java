@@ -23,27 +23,24 @@ public class EmployeeService {
         return repository.findAll();
     }
 
-
-    public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe, String fonction,
-                                                 LocalDate hireDateStart, LocalDate hireDateEnd,
-                                                 LocalDate departureDateStart, LocalDate departureDateEnd,
+    public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe,
+                                                 String fonction, LocalDate hire_date_start, LocalDate hire_date_end,
                                                  Sort.Direction sortDirection, String sortField) {
-        return repository.filterAndSortEmployees(firstname, lastname, sexe, fonction,
-                hireDateStart, hireDateEnd, departureDateStart, departureDateEnd,
-                sortDirection.name(), sortField);
+        List<Employee> filteredEmployees = repository.filterEmployees(
+                firstname, lastname, sexe != null ? sexe.toString() : null, fonction,
+                hire_date_start, hire_date_end);
+
+        return filteredEmployees;
+    }
+    public List<Employee> filterAndSortEmployee(String firstname, String lastname, Employee.Sexe sexe,
+                                                 String fonction, LocalDate hire_date_start, LocalDate hire_date_end) {
+        List<Employee> filteredEmployees = repository.filterEmployees(
+                firstname, lastname, sexe != null ? sexe.toString() : null, fonction,
+                hire_date_start, hire_date_end);
+
+        return filteredEmployees;
     }
 
-/*
-    public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe, String fonction,
-                                                 LocalDate hireDateStart, LocalDate hireDateEnd,
-                                                 LocalDate departureDateStart, LocalDate departureDateEnd,
-                                                 Sort.Direction sortDirection, String sortField) {
-        List<Employee> employees = repository.filterAndSortEmployees(firstname, lastname, sexe, fonction,
-                hireDateStart, hireDateEnd, departureDateStart, departureDateEnd);
-
-        return employees;
-    }
-*/
     public Employee createEmployee(Employee tocreate) throws IOException {
             return repository.save(tocreate);
     }
@@ -60,4 +57,5 @@ public class EmployeeService {
     public Employee updateInfoEmployee(Employee toUpdate){
         return repository.save(toUpdate);
     }
+
 }

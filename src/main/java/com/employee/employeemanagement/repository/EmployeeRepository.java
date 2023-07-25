@@ -11,37 +11,23 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    @Query("SELECT e FROM employee e " +
-            "WHERE (:firstname IS NULL OR e.firstname ILIKE CONCAT('%', :firstname, '%')) " +
-            "AND (:lastname IS NULL OR e.lastname ILIKE CONCAT('%', :lastname, '%')) " +
-            "AND (:sexe IS NULL OR e.sexe = :sexe) " +
-            "AND (:fonction IS NULL OR e.fonction ILIKE CONCAT('%', :fonction, '%')) " +
-            "AND (:hireDateStart IS NULL OR e.hireDate >= :hireDateStart) " +
-            "AND (:hireDateEnd IS NULL OR e.hireDate <= :hireDateEnd) " +
-            "AND (:departureDateStart IS NULL OR e.departureDate >= :departureDateStart) " +
-            "AND (:departureDateEnd IS NULL OR e.departureDate <= :departureDateEnd) " +
-            "ORDER BY " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'firstname' THEN e.firstname END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'firstname' THEN e.firstname END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'lastname' THEN e.lastname END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'lastname' THEN e.lastname END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'sexe' THEN e.sexe END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'sexe' THEN e.sexe END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'fonction' THEN e.fonction END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'fonction' THEN e.fonction END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'hireDate' THEN e.hireDate END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'hireDate' THEN e.hireDate END DESC, " +
-            "   CASE WHEN :sortDirection = 'ASC' AND :sortField = 'departureDate' THEN e.departureDate END ASC, " +
-            "   CASE WHEN :sortDirection = 'DESC' AND :sortField = 'departureDate' THEN e.departureDate END DESC")
-    List<Employee> filterAndSortEmployees(@Param("firstname") String firstname,
-                                          @Param("lastname") String lastname,
-                                          @Param("sexe") Employee.Sexe sexe,
-                                          @Param("fonction") String fonction,
-                                          @Param("hireDateStart") LocalDate hireDateStart,
-                                          @Param("hireDateEnd") LocalDate hireDateEnd,
-                                          @Param("departureDateStart") LocalDate departureDateStart,
-                                          @Param("departureDateEnd") LocalDate departureDateEnd,
-                                          @Param("sortDirection") String sortDirection,
-                                          @Param("sortField") String sortField);
+    @Query(value = "SELECT * FROM employee " +
+            "WHERE (:firstname IS NULL OR LOWER(employee.firstname) ILIKE LOWER(CONCAT('%', :firstname, '%'))) " +
+            "AND (:lastname IS NULL OR LOWER(employee.lastname) ILIKE LOWER(CONCAT('%', :lastname, '%'))) " +
+            "AND (:sexe IS NULL OR employee.sexe = :sexe) " +
+            "AND (:fonction IS NULL OR LOWER(employee.fonction) ILIKE LOWER(CONCAT('%', :fonction, '%'))) " +
+            "AND (:hire_date_start IS NULL OR :hire_date_end IS NULL OR employee.hire_date BETWEEN :hire_date_start AND :hire_date_end) ",
+            nativeQuery = true)
+    List<Employee> filterEmployees(
+           @Param("firstname") String firstname,
+           @Param("lastname")String lastname,
+           String sexe,
+           String fonction,
+           @Param("hire_date_start") LocalDate hire_date_start,
+           @Param("hire_date_end")LocalDate hire_date_end
+    );
+
 }
+
+
 

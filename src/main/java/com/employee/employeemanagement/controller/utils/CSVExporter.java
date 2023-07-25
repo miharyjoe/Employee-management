@@ -10,7 +10,9 @@ public class CSVExporter {
 
     public static void exportEmployeesToCSV(PrintWriter writer, List<Employee> employees) {
         // Write CSV header
-        writer.println("First Name,Last Name,Sexe,Fonction,Hire Date,Matricule,Phone Number");
+        writer
+                .println
+                ("First Name,Last Name,Sexe,Fonction,Hire Date,Matricule,Phone Number,Address,CIN, CSP, ChildrenCharge,EmailPerso");
         // Write employee data
         for (Employee employee : employees) {
             writer.println(
@@ -20,7 +22,13 @@ public class CSVExporter {
                             employee.getFonction() + CSV_SEPARATOR +
                             employee.getHireDate() + CSV_SEPARATOR +
                             employee.getMatricule() + CSV_SEPARATOR +
-                            employee.getTelephones()
+                            employee.getTelephones() + CSV_SEPARATOR +
+                            employee.getAddress() + CSV_SEPARATOR +
+                            employee.getCinNumber() + CSV_SEPARATOR +
+                            employee.getCsp() + CSV_SEPARATOR +
+                            employee.getChildrenCharge() + CSV_SEPARATOR +
+                            employee.getEmailPerso()
+
             );
         }
     }
