@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" th:fragment="logout">
+  <div class="container-fluid">
+    <!-- Navbar Brand with Logo Image -->
+    <div class="navbar-brand">
+      <img width="70px" height="70px" th:src="@{../images/logo.png}">
+    </div>
+    <a class="navbar-brand" href="#">The Circle</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/employees">List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/employee/new">Add</a>
+        </li>
+        <!-- Add the Logout link here -->
+        <li class="nav-item">
+          <a class="nav-link" href="/login" th:action="@{/logout}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

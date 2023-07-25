@@ -5,6 +5,7 @@ import com.employee.employeemanagement.controller.utils.CSVExporter;
 import com.employee.employeemanagement.entity.Employee;
 import com.employee.employeemanagement.service.EmployeeService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -26,13 +27,17 @@ public class EmployeeController {
     private final EmployeeMapper mapper;
 
     @GetMapping("employees")
-    public String showEmployees(Model model) {
+    public String showEmployees(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // If the user is not authenticated, redirect to the login page
+            return "redirect:/login";
+        }
         List<Employee> allEmployees = employeeService.getAllEmployees();
         model.addAttribute("employees", allEmployees);
         return "employees";
     }
 
-    // Mapping to handle the filter form submission
     @GetMapping("employees/filter")
     public String filterAndSortEmployees(@RequestParam(required = false) String firstname,
                                          @RequestParam(required = false) String lastname,
@@ -40,26 +45,43 @@ public class EmployeeController {
                                          @RequestParam(required = false) String fonction,
                                          @RequestParam(required = false) LocalDate hireDateStart,
                                          @RequestParam(required = false) LocalDate hireDateEnd,
-                                         @RequestParam(required = false) LocalDate departureStart,
-                                         @RequestParam(required = false) LocalDate departureEnd,
-                                         @RequestParam(required = false) Sort.Direction sortDirection,
-                                         @RequestParam(defaultValue = "id") String sortField,
-                                         Model model){
-        List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(firstname, lastname, sexe, fonction,
-                hireDateStart, hireDateEnd, departureStart, departureEnd, sortDirection, sortField);
+                                         @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
+                                         @RequestParam(required = false, defaultValue = "firstname") String sortField,
+                                         Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // If the user is not authenticated, redirect to the login page
+            return "redirect:/login";
+        }
+        List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
+                firstname,
+                lastname,
+                sexe,
+                fonction,
+                hireDateStart,
+                hireDateEnd,
+                sortDirection,
+                sortField
+        );
         model.addAttribute("employees", filteredEmployees);
 
         return "employees";
     }
 
     @GetMapping("employee/new")
-    public String addEmployee(Model model){
+    public String addEmployee(Model model, HttpSession session){
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // If the user is not authenticated, redirect to the login page
+            return "redirect:/login";
+        }
         com.employee.employeemanagement.model.Employee employeeModel = new com.employee.employeemanagement.model.Employee();
         model.addAttribute("employee", employeeModel);
         return "form_employee";
     }
     @PostMapping("employee/add")
     public String saveEmployee(@RequestParam("image") MultipartFile imageFile, com.employee.employeemanagement.model.Employee employeeModel) throws IOException {
+
             employeeService.createEmployee(mapper.toRest(employeeModel));
         return "redirect:/employees";
     }
@@ -72,7 +94,12 @@ public class EmployeeController {
     }
 
     @GetMapping("employee/update")
-    public String upEmployee(Model model, @RequestParam("id") Long id){
+    public String upEmployee(Model model, @RequestParam("id") Long id, HttpSession session){
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // If the user is not authenticated, redirect to the login page
+            return "redirect:/login";
+        }
         Employee employee = employeeService.selectEmployee(id);
         model.addAttribute("employee",employee);
         return "update_employee";
