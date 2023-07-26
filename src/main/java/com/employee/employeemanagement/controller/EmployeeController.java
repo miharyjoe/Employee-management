@@ -153,7 +153,7 @@ public class EmployeeController {
         LocalDate hire_date_end = (LocalDate) session.getAttribute("hire_date_end");
         Sort.Direction sortDirection = (Sort.Direction) session.getAttribute("sortDirection");
         String sortField = (String) session.getAttribute("sortField");
-        List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction, hire_date_start, hire_date_end);
+        List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction);
 
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=\"employeesfilter.csv\"");
