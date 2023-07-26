@@ -26,13 +26,16 @@ public class EmployeeService {
 
     public List<Employee> filterAndSortEmployees(String firstname, String lastname, Employee.Sexe sexe,
                                                  String fonction, LocalDate hire_date_start, LocalDate hire_date_end,
-                                                 Sort.Direction sortDirection, String sortField) {
+                                                 Sort.Direction sortDirection, String sortField, String telephones) {
 
         List<Employee> filteredEmployees = repository.filterEmployees(
                 firstname, lastname, sexe != null ? sexe.toString() : null, fonction);
 
         if (hire_date_start != null && hire_date_end != null) {
             filteredEmployees = repository.findByHireDateBetween(hire_date_start, hire_date_end);
+        }
+        else if(telephones != null){
+            filteredEmployees = repository.findEmployeeByTelephonesAfter(telephones);
         }
         return filteredEmployees;
     }

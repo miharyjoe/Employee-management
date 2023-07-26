@@ -52,6 +52,7 @@ public class EmployeeController {
     @RequestParam(required = false) LocalDate hire_date_end,
     @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
     @RequestParam(required = false, defaultValue = "firstName") String sortField,
+    @RequestParam(required = false) String telephones,
     Model model, HttpSession session) {
     session.setAttribute("firstname", firstname);
     session.setAttribute("lastname", lastname);
@@ -61,10 +62,11 @@ public class EmployeeController {
     session.setAttribute("hire_date_start", hire_date_start);
     session.setAttribute("sortDirection", sortDirection);
     session.setAttribute("sortField", sortField);
+        session.setAttribute("telephones", telephones);
 
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
                 firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
-                sortDirection, sortField);
+                sortDirection, sortField, telephones);
 
         if (sortField != null && !sortField.isEmpty()) {
             filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
