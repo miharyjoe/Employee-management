@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +30,43 @@ public class EmployeeService {
         List<Employee> filteredEmployees = repository.filterEmployees(
                 firstname, lastname, sexe != null ? sexe.toString() : null, fonction,
                 hire_date_start, hire_date_end);
-
         return filteredEmployees;
+    }
+    public List<Employee> sortEmployees(List<Employee> employees, Sort.Direction sortDirection, String sortField) {
+        Comparator<Employee> comparator = getComparator(sortDirection, sortField);
+        employees.sort(comparator);
+        return employees;
+    }
+    private Comparator<Employee> getComparator(Sort.Direction sortDirection, String sortField) {
+        Comparator<Employee> comparator;
+        switch (sortField) {
+            case "firstname":
+                comparator = Comparator.comparing(Employee::getFirstname);
+                break;
+            case "lastname":
+                comparator = Comparator.comparing(Employee::getLastname);
+                break;
+            case "sexe":
+                comparator = Comparator.comparing(Employee::getSexe);
+                break;
+            case "fonction":
+                comparator = Comparator.comparing(Employee::getFonction);
+                break;
+            case "hireDate":
+                comparator = Comparator.comparing(Employee::getHireDate);
+                break;
+            case "matricule":
+                comparator = Comparator.comparing(Employee::getMatricule);
+                break;
+            default:
+                comparator = Comparator.comparing(Employee::getFirstname);
+        }
+
+        if (sortDirection == Sort.Direction.DESC) {
+            comparator = comparator.reversed();
+        }
+
+        return comparator;
     }
     public List<Employee> filterAndSortEmployee(String firstname, String lastname, Employee.Sexe sexe,
                                                  String fonction, LocalDate hire_date_start, LocalDate hire_date_end) {

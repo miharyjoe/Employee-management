@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -49,16 +50,25 @@ public class EmployeeController {
     @RequestParam(required = false) String fonction,
     @RequestParam(required = false) LocalDate hire_date_start,
     @RequestParam(required = false) LocalDate hire_date_end,
-    @RequestParam(required = false) LocalDate departure_date_start,
-    @RequestParam(required = false) LocalDate departure_date_end,
     @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
     @RequestParam(required = false, defaultValue = "firstName") String sortField,
-    Model model) {
+    Model model, HttpSession session) {
+    session.setAttribute("firstname", firstname);
+    session.setAttribute("lastname", lastname);
+    session.setAttribute("sexe", sexe);
+    session.setAttribute("fonction", fonction);
+    session.setAttribute("hire_date_start", hire_date_start);
+    session.setAttribute("hire_date_start", hire_date_start);
+    session.setAttribute("sortDirection", sortDirection);
+    session.setAttribute("sortField", sortField);
 
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
                 firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
                 sortDirection, sortField);
 
+        if (sortField != null && !sortField.isEmpty()) {
+            filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
+        }
         model.addAttribute("employees", filteredEmployees);
         return "employee_filter";
     }
@@ -133,14 +143,16 @@ public class EmployeeController {
         CSVExporter.exportEmployeesToCSV(response.getWriter(), employees);
     }
     @GetMapping("/employees/filter/export/csv")
-    public void exportFilterToCSV(@RequestParam(required = false) String firstname,
-                                  @RequestParam(required = false) String lastname,
-                                  @RequestParam(required = false) Employee.Sexe sexe,
-                                  @RequestParam(required = false) String fonction,
-                                  @RequestParam(required = false) LocalDate hire_date_start,
-                                  @RequestParam(required = false) LocalDate hire_date_end,
-                                  HttpServletResponse response) throws IOException {
-
+    public void exportFilterToCSV(
+                                  HttpServletResponse response, HttpSession session) throws IOException {
+        String firstname = (String) session.getAttribute("firstname");
+        String lastname = (String)session.getAttribute("lastname");
+        Employee.Sexe sexe = (Employee.Sexe)session.getAttribute("sexe");
+        String fonction = (String)session.getAttribute("fonction");
+        LocalDate hire_date_start = (LocalDate) session.getAttribute("hire_date_start");
+        LocalDate hire_date_end = (LocalDate) session.getAttribute("hire_date_end");
+        Sort.Direction sortDirection = (Sort.Direction) session.getAttribute("sortDirection");
+        String sortField = (String) session.getAttribute("sortField");
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction, hire_date_start, hire_date_end);
 
         response.setContentType("text/csv");
