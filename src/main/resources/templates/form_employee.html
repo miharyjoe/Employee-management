@@ -41,8 +41,8 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="telephones">Telephones:</label>
-      <input type="text" class="form-control" id="telephones" th:field="*{telephones}" required>
+      <label for="telephones">Telephones(with country code and separate with coma if multiple phone number):</label>
+      <input type="text" class="form-control" id="telephones" th:field="*{telephones}" maxlength="14" required>
     </div>
     <div class="form-group">
       <label for="address">Address:</label>
