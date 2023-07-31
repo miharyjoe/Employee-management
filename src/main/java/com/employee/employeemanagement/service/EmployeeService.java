@@ -31,6 +31,9 @@ public class EmployeeService {
         List<Employee> filteredEmployees = new ArrayList<>();
             filteredEmployees = repository.filterEmployees(
                     firstname, lastname, sexe != null ? sexe.toString() : null, fonction);
+        if (sortField != null && !sortField.isEmpty()) {
+            filteredEmployees = sortEmployees(filteredEmployees, sortDirection, sortField);
+        }
 
         return filteredEmployees;
     }

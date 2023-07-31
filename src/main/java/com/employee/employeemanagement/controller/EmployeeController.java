@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -63,17 +64,30 @@ public class EmployeeController {
     session.setAttribute("sortDirection", sortDirection);
     session.setAttribute("sortField", sortField);
         session.setAttribute("telephones", telephones);
-
-        List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
+        List<Employee> filteredEmployees =  employeeService.filterAndSortEmployees(
                 firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
                 sortDirection, sortField, telephones);
-        if (sortField != null && !sortField.isEmpty()) {
-            filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
-        }
 
         model.addAttribute("employees", filteredEmployees);
         return "employee_filter";
     }
+
+    @GetMapping("employees/filter/date")
+    public String filterAndSortEmployees(
+                                         @RequestParam(required = false) LocalDate hire_date_start,
+                                         @RequestParam(required = false) LocalDate hire_date_end,Model model){
+        List<Employee> filteredEmployees =  employeeService.filterDate(hire_date_start,hire_date_end);
+        model.addAttribute("employees", filteredEmployees);
+        return "employee_filter";
+    }
+    @GetMapping("employees/filter/phone")
+    public String filterAndSortEmployees(
+                                         @RequestParam(required = false) String telephones ,Model model){
+        List<Employee> filteredEmployees =  employeeService.phoneFilter(telephones);
+        model.addAttribute("employees", filteredEmployees);
+        return "employee_filter";
+    }
+
     @GetMapping("employee/new")
     public String addEmployee(Model model, HttpSession session, HttpServletResponse response){
         String username = (String) session.getAttribute("username");
@@ -161,9 +175,7 @@ public class EmployeeController {
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
                 firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
                 sortDirection, sortField, telephones);
-        if (sortField != null && !sortField.isEmpty()) {
-            filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
-        }
+
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=\"employeesfilter.csv\"");
 

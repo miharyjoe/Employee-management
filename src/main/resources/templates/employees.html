@@ -21,9 +21,6 @@
             <div class="col-md-3">
                 <input type="text" class="form-control" name="lastname" placeholder="Lastname">
             </div>
-            <div class="col-md-3">
-                <input type="text" class="form-control" name="telephones" placeholder="telephones">
-            </div>
             <div class="col-md-2">
                 <select class="form-control" name="sexe">
                     <option value="">-- Select Sexe --</option>
@@ -33,14 +30,6 @@
             </div>
             <div class="col-md-3">
                 <input type="text" class="form-control" name="fonction" placeholder="Fonction">
-            </div>
-            <div class="col-md-2">
-                <label>Hire Date Start:</label>
-                <input type="date" class="form-control" name="hire_date_start">
-            </div>
-            <div class="col-md-2">
-                <label>Hire Date End:</label>
-                <input type="date" class="form-control" name="hire_date_end">
             </div>
             <div class="col-md-2">
                 <label>Sort By:</label>
@@ -56,6 +45,31 @@
         </div>
     </form>
 
+    <form th:action="@{/employees/filter/date}" method="get">
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label>Hire Date Start:</label>
+                <input type="date" class="form-control" name="hire_date_start">
+            </div>
+            <div class="col-md-2">
+                <label>Hire Date End:</label>
+                <input type="date" class="form-control" name="hire_date_end">
+            </div>
+            <div class="col-md-1 mt-3">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+    <form th:action="@{/employees/filter/phone}" method="get">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="telephones" placeholder="telephones">
+            </div>
+            <div class="col-md-1 mt-3">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
 
 
     <!-- Employee Table -->
