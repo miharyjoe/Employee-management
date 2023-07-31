@@ -51,7 +51,7 @@ public class EmployeeController {
     @RequestParam(required = false) LocalDate hire_date_start,
     @RequestParam(required = false) LocalDate hire_date_end,
     @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection,
-    @RequestParam(required = false, defaultValue = "firstName") String sortField,
+    @RequestParam(required = false, defaultValue = "firstname") String sortField,
     @RequestParam(required = false) String telephones,
     Model model, HttpSession session) {
     session.setAttribute("firstname", firstname);
@@ -59,7 +59,7 @@ public class EmployeeController {
     session.setAttribute("sexe", sexe);
     session.setAttribute("fonction", fonction);
     session.setAttribute("hire_date_start", hire_date_start);
-    session.setAttribute("hire_date_start", hire_date_start);
+    session.setAttribute("hire_date_end", hire_date_end);
     session.setAttribute("sortDirection", sortDirection);
     session.setAttribute("sortField", sortField);
         session.setAttribute("telephones", telephones);
@@ -67,10 +67,10 @@ public class EmployeeController {
         List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
                 firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
                 sortDirection, sortField, telephones);
-
         if (sortField != null && !sortField.isEmpty()) {
             filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
         }
+
         model.addAttribute("employees", filteredEmployees);
         return "employee_filter";
     }
@@ -149,17 +149,24 @@ public class EmployeeController {
                                   HttpServletResponse response, HttpSession session) throws IOException {
         String firstname = (String) session.getAttribute("firstname");
         String lastname = (String)session.getAttribute("lastname");
+        String telephones = (String)session.getAttribute("telephones");
         Employee.Sexe sexe = (Employee.Sexe)session.getAttribute("sexe");
         String fonction = (String)session.getAttribute("fonction");
         LocalDate hire_date_start = (LocalDate) session.getAttribute("hire_date_start");
         LocalDate hire_date_end = (LocalDate) session.getAttribute("hire_date_end");
         Sort.Direction sortDirection = (Sort.Direction) session.getAttribute("sortDirection");
         String sortField = (String) session.getAttribute("sortField");
-        List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction);
+      //  List<Employee> filteredEmployees = employeeService.filterAndSortEmployee(firstname, lastname, sexe, fonction, telephones);
 
+        List<Employee> filteredEmployees = employeeService.filterAndSortEmployees(
+                firstname, lastname, sexe, fonction, hire_date_start, hire_date_end,
+                sortDirection, sortField, telephones);
+        if (sortField != null && !sortField.isEmpty()) {
+            filteredEmployees = employeeService.sortEmployees(filteredEmployees, sortDirection, sortField);
+        }
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=\"employeesfilter.csv\"");
 
-        CSVExporter.exportEmployeesToCSV(response.getWriter(), filteredEmployees);
+       CSVExporter.exportEmployeesToCSV(response.getWriter(), filteredEmployees);
     }
 }

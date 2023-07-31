@@ -28,16 +28,19 @@ public class EmployeeService {
                                                  String fonction, LocalDate hire_date_start, LocalDate hire_date_end,
                                                  Sort.Direction sortDirection, String sortField, String telephones) {
 
-        List<Employee> filteredEmployees = repository.filterEmployees(
-                firstname, lastname, sexe != null ? sexe.toString() : null, fonction);
+        List<Employee> filteredEmployees = new ArrayList<>();
+            filteredEmployees = repository.filterEmployees(
+                    firstname, lastname, sexe != null ? sexe.toString() : null, fonction);
 
-        if (hire_date_start != null && hire_date_end != null) {
-            filteredEmployees = repository.findByHireDateBetween(hire_date_start, hire_date_end);
-        }
-        else if(telephones != null){
-            filteredEmployees = repository.findEmployeeByTelephonesAfter(telephones);
-        }
         return filteredEmployees;
+    }
+    public List<Employee> phoneFilter(String telephones){
+        List<Employee> employees = repository.findEmployeeByTelephones(telephones);
+        return  employees;
+    }
+    public List<Employee> filterDate(LocalDate hire_date_start, LocalDate hire_date_end){
+        List<Employee> employees = repository.findByHireDateBetween(hire_date_start, hire_date_end );
+        return  employees;
     }
     public List<Employee> sortEmployees(List<Employee> employees, Sort.Direction sortDirection, String sortField) {
         Comparator<Employee> comparator = getComparator(sortDirection, sortField);
@@ -75,14 +78,15 @@ public class EmployeeService {
 
         return comparator;
     }
+    /*
     public List<Employee> filterAndSortEmployee(String firstname, String lastname, Employee.Sexe sexe,
-                                                 String fonction) {
+                                                 String fonction, String telephones) {
         List<Employee> filteredEmployees = repository.filterEmployees(
-                firstname, lastname, sexe != null ? sexe.toString() : null, fonction);
+                firstname, lastname, sexe != null ? sexe.toString() : null, fonction, );
 
         return filteredEmployees;
     }
-
+*/
     public Employee createEmployee(Employee tocreate) throws IOException {
             return repository.save(tocreate);
     }
