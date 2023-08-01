@@ -24,28 +24,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             @Param("sexe") String sexe,
             @Param("fonction") String fonction
     );
-    /*
-    @Query(value = "SELECT * FROM employee " +
-            "WHERE (:firstname IS NULL OR LOWER(employee.firstname) ILIKE LOWER(CONCAT('%', :firstname, '%'))) " +
-            "AND (:lastname IS NULL OR LOWER(employee.lastname) ILIKE LOWER(CONCAT('%', :lastname, '%'))) " +
-            "AND (:sexe IS NULL OR employee.sexe = :sexe) " +
-            "AND (:fonction IS NULL OR LOWER(employee.fonction) ILIKE LOWER(CONCAT('%', :fonction, '%'))) " +
-            "AND ((:hire_date_start IS NULL AND :hire_date_end IS NULL) OR employee.hire_date BETWEEN :hire_date_start AND :hire_date_end)",
-            nativeQuery = true)
-    List<Employee> filterEmployees(
-           @Param("firstname") String firstname,
-           @Param("lastname")String lastname,
-           String sexe,
-           String fonction,
-           @Param("hire_date_start") LocalDate hire_date_start,
-           @Param("hire_date_end") LocalDate hire_date_end
-    );
-
-     */
-
     List<Employee> findByHireDateBetween(LocalDate hire_date_start, LocalDate hire_date_end);
 
-    List<Employee> findEmployeeByTelephones(String telephones);
+    List<Employee> findEmployeeByTelephonesContainingIgnoreCase(String telephones);
 
 }
 
