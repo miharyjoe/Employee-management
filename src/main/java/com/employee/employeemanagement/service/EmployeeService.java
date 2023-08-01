@@ -81,15 +81,6 @@ public class EmployeeService {
 
         return comparator;
     }
-    /*
-    public List<Employee> filterAndSortEmployee(String firstname, String lastname, Employee.Sexe sexe,
-                                                 String fonction, String telephones) {
-        List<Employee> filteredEmployees = repository.filterEmployees(
-                firstname, lastname, sexe != null ? sexe.toString() : null, fonction, );
-
-        return filteredEmployees;
-    }
-*/
     public Employee createEmployee(Employee tocreate) throws IOException {
             return repository.save(tocreate);
     }
