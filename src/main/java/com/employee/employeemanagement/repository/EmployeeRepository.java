@@ -26,7 +26,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     );
     List<Employee> findByHireDateBetween(LocalDate hire_date_start, LocalDate hire_date_end);
 
-    List<Employee> findEmployeeByTelephonesContainingIgnoreCase(String telephones);
+    List<Employee> findEmployeeByTelephonesAfter(String telephones);
 
 }
 
