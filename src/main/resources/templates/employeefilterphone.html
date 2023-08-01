@@ -50,7 +50,7 @@
                     <input type="hidden" name="id" th:value="${employee.id}" />
                     <button type="submit" class="btn btn-secondary">More</button>
                 </form>
-            </td><
+            </td>
             <td>
                 <form th:action="@{/employee/update}" method="get">
                     <input type="hidden" name="id" th:value="${employee.id}" />
@@ -64,7 +64,7 @@
 
         </tbody>
     </table>
-    <a th:href="@{/employees/filter/export/csv}"
+    <a th:href="@{/employees/filter/phone/export/csv}"
        class="btn btn-success mt-3">Export to CSV</a>
 
 
