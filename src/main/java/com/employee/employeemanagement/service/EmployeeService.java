@@ -38,7 +38,7 @@ public class EmployeeService {
         return filteredEmployees;
     }
     public List<Employee> phoneFilter(String telephones){
-        List<Employee> employees = repository.findEmployeeByTelephones(telephones);
+        List<Employee> employees = repository.findEmployeeByTelephonesContainingIgnoreCase(telephones);
         return  employees;
     }
     public List<Employee> filterDate(LocalDate hire_date_start, LocalDate hire_date_end){
